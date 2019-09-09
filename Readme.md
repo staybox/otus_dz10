@@ -6,7 +6,7 @@
     2. Дать конкретному пользователю права рута
 
 1. Запретить всем пользователям, кроме группы admin логин в выходные(суббота и воскресенье), без учета праздников
-- Заходим в файл ```nano /etc/pam.d/sshd``` и приводим его к следующему виду:
+- Заходим в файлы ```nano /etc/pam.d/sshd``` и ```nano /etc/pam.d/login``` и приводим их к следующему виду:
 ```
 [root@lvm system]# cat /etc/pam.d/sshd
 #%PAM-1.0
@@ -31,6 +31,8 @@ session    include      postlogin
 # Used with polkit to reauthorize users in remote sessions
 -session   optional     pam_reauthorize.so prepare
 ```
+Чтобы у пользователя не было возможности войти в систему не только через SSH, а также через обычную консоль (монитор) то необходимо откорректировать два файла.
+
 - Далее заходим в файл ```nano /etc/security/time.conf``` и добавляем в конце файла строку ```*;*;test_user;!Tu```
 - Создаем пользователя командой ```useradd test_user``` и задаем ему пароль ```passwd test_user```
 - Пытаемся зайди в тот день, когда у нас работает правило ```ssh test_user@localhost``` и получаем:
@@ -39,6 +41,7 @@ session    include      postlogin
 test_user@localhost's password:
 Authentication failed.
 ```
+
 2. Дать конкретному пользователю права рута:
 - ```grep test_user /etc/passwd``` - Ищем нашего пользователя, которому надо дать права root
 ```
