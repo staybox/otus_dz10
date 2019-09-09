@@ -37,7 +37,7 @@ session    include      postlogin
 auth [user_unknown=ignore success=ok ignore=ignore default=bad] pam_securetty.so
 auth       substack     system-auth
 auth       include      postlogin
-account   required   pam_time.so
+account   required   pam_time.so # Добавляем вот эту строку
 account    required     pam_nologin.so
 account    include      system-auth
 password   include      system-auth
